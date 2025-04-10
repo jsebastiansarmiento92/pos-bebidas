@@ -1,0 +1,61 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.2'
+	id 'io.spring.dependency-management' version '1.1.7'
+	// Agrega el plugin de SonarQube:
+	id 'org.sonarqube' version '4.3.0.3225'
+	// Agrega el plugin de Jacoco:
+	id 'jacoco'
+}
+
+group = 'com.multipos'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	runtimeOnly 'io.asyncer:r2dbc-mysql'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' 
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	testImplementation 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+sonarqube {
+	properties {
+		// Cambia estos valores según la configuración de tu proyecto
+		property "sonar.projectKey", "pos"
+		property "sonar.host.url", "http://localhost:9000"
+		property "sonar.token", "sqp_670ee3926b9c1b84dc3f342d270934aea3eeb8ac"
+
+		// Si usas SonarCloud, agrega además: sqp_670ee3926b9c1b84dc3f342d270934aea3eeb8ac
+		// property "sonar.organization", "tu-organizacion"
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+}
+
+test {
+	useJUnitPlatform() // Esto es clave para usar JUnit 5
+}
+tasks.named('test') {
+	useJUnitPlatform()
+}
